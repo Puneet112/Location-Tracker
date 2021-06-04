@@ -1,0 +1,267 @@
+<%- include('partials/header.ejs') %>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+
+    <div class="location">
+        <div class="row"  style="margin: 0;">
+            <div class="col-sm-4 px-0">
+                <div class="location-content">
+                    <ul>
+                        <li class="list">
+                            <a data-toggle="collapse" href="#collapseExample" class="toggle-header" onclick="toggleHeader()" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                <div class="row">
+                                    <div class="col-1 pr-0"><b>1.</b></div>
+                                    <div class="col-9 pl-0"><b>Device 1 (Current Device)</b><br>OSX - Actice <span id="id"></span></div>
+                                    <div class="col-2"><i class="fas fa-location-arrow"></i></div>
+                                </div>
+                            </a>
+                            <div class="row mt-2">
+                                <div class="col-1 pr-0"></div>
+                                <div class="col-9 pl-0"><button class="btn btn-block btn-danger" data-toggle="modal" data-target="#myModal">SOS</button></div>
+                            </div>
+                            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalTitle"
+                                aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">Confirmation</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">Are You Sure You Want To Send The Emergency Signal?</div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-primary" onclick="sos()" data-dismiss="modal">Yes</button>
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <ul id="devices"></ul>
+                </div>
+            </div>
+            <div class="col-sm-8 px-0">
+                <div id="toggle-header">
+                    <h2 class="location-header">Locate Devices</h2>
+                    <p class="location-desc">
+                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim
+                        keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim
+                        keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim
+                        keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim
+                        keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim
+                        keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Anim pariatur cliche
+                        reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim
+                        keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Anim pariatur cliche
+                        reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim
+                        keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Anim pariatur cliche
+                        reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim
+                        keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+                    </p>
+                </div>
+                <div class="collapse" id="collapseExample"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        var socket = io();
+        var num = 2;
+        var users = {};
+        var coordinates = [];
+
+        // Username
+        var username = document.getElementById("user").innerHTML;
+
+        // Get user coordinates
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    coordinates = [position.coords.latitude, position.coords.longitude]
+                },
+                () => {
+                    handleLocationError(true, infoWindow, map.getCenter());
+                }
+            );
+        } else {
+            // Browser doesn't support Geolocation
+            handleLocationError(false, infoWindow, map.getCenter());
+        }
+
+        // Fetching and Displayinhg Location Data
+        function toggleHeader() {
+            var x = document.getElementById("toggle-header");
+            if (x.style.display === "none") {
+                x.style.display = "block";
+            } else {
+                x.style.display = "none";
+            }
+        }
+
+        let map, infoWindow;
+
+        function initMap(lat, lng) {
+            map = new google.maps.Map(document.getElementById("collapseExample"), {
+                center: { lat: 23.0707, lng: 80.0982 },
+                zoom: 6,
+            });
+            infoWindow = new google.maps.InfoWindow();
+            const locationButton = document.createElement("button");
+            locationButton.textContent = "Pan to Current Location";
+            locationButton.classList.add("custom-map-control-button");
+            map.controls[google.maps.ControlPosition.TOP_CENTER].push(
+                locationButton
+            );
+            locationButton.addEventListener("click", () => {
+                // Try HTML5 geolocation.
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            const pos = {
+                                lat: lat || position.coords.latitude,
+                                lng: lng || position.coords.longitude,
+                            };
+                            infoWindow.setPosition(pos);
+                            infoWindow.setContent("Location found.");
+                            infoWindow.open(map);
+                            map.setCenter(pos);
+                        },
+                        () => {
+                            handleLocationError(true, infoWindow, map.getCenter());
+                        }
+                    );
+                } else {
+                    // Browser doesn't support Geolocation
+                    handleLocationError(false, infoWindow, map.getCenter());
+                }
+            });
+        }
+
+        function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+            infoWindow.setPosition(pos);
+            infoWindow.setContent(
+                browserHasGeolocation
+                    ? "Error: The Geolocation service failed."
+                    : "Error: Your browser doesn't support geolocation."
+            );
+            infoWindow.open(map);
+        }
+
+        // Beep Function
+        let context = new (window.AudioContext || window.webkitAudioContext)();
+
+        const beep = (freq = 800, duration = 500, vol = 100) => {
+            const oscillator = context.createOscillator();
+            const gain = context.createGain();
+            oscillator.connect(gain);
+            oscillator.frequency.value = freq;
+            oscillator.type = "square";
+            gain.connect(context.destination);
+            gain.gain.value = vol * 0.01;
+            oscillator.start(context.currentTime);
+            oscillator.stop(context.currentTime + duration * 0.001);
+        }
+
+        function sos() {
+            socket.emit("emergency", { username: username, info: coordinates });
+            alert("Emergency SOS Sent....");
+        }
+
+        function playSound(play_id) {
+            // console.log("Play Sound: ");
+            // console.log(id);
+            document.getElementById(play_id).innerHTML = '<i class="fas fa-volume-mute"></i>';
+            play_id = play_id.slice(0, -1);
+            socket.emit("sound", play_id);
+            setTimeout(() => {
+                document.getElementById(play_id + "1").innerHTML = '<i class="fas fa-volume-up"></i>';
+            }, 10000);
+        }
+
+        // function stop_sound(stop_id) {
+        //     console.log("Stop: ");
+        //     console.log(stop_id);
+        //     socket.emit("stop", stop_id);
+        // }
+
+        // User Connected
+        socket.emit("user_connected", username);
+
+        //Get Socket ID
+        socket.on("get_id", (data) => {
+            document.getElementById("id").innerText = "(ID: " + data.id + ")";
+        });
+
+        // Send Location Data
+        socket.emit("location_data", { username: username, info: coordinates});
+
+        // Location Received
+        socket.on("location_received", (data) => {
+            // console.log("Location data received - sender: " + data.username + " receiver: " + username);
+            var content = document.getElementById("devices").innerHTML;
+            var html = content + '<li class="list" id="' + data.id + '"><a data-toggle="collapse" href="#collapseExample" class="toggle-header" onclick="toggleHeader()" role="button" aria-expanded="false" aria-controls="collapseExample"><div class="row"><div class="col-1 pr-0"><b>' + num + '.</b></div><div class="col-9 pl-0"><b>Device ' + num + '</b><br>OSX - Actice (ID: ' + data.id + ')</div> <div class="col-2"><i class="fas fa-location-arrow"></i></div></div></a><div class="row sound"><div class="col-1 pr-0"></div><div class="col-11 pl-0">Lost device? Play Sound <button type="button" id="' + data.id + '1" class="volume"><i id="vol" class="fas fa-volume-up"></i></button></div></div></li>';
+            document.getElementById("devices").innerHTML = html;
+            num++;
+            users[data.id] = data.info;
+            // console.log(users);
+            var id1 = document.getElementById("id");
+            for(var id in users) {
+                document.getElementById(id + "").addEventListener("click", () => {
+                    // console.log("Clicked");
+                    var lat = users[id][0];
+                    var lng = users[id][1];
+                    // console.log("lat: " + lat + " lng: " + lng);
+                    initMap(lat, lng);
+                })
+                if(id != id1) {
+                    // console.log("Click: " + id);
+                    document.getElementById(id + "1").addEventListener("click", () => {
+                        // console.log(event.target);
+                        // console.log(event.currentTarget.id);
+                        playSound(event.currentTarget.id);
+                    });
+                }
+            }
+        });
+
+        // Play Sound
+        socket.on("play_sound", (data) => {
+            // console.log("Play");
+            var interval = setInterval(() => {
+                beep();
+            }, 1000);
+            setTimeout(() => {
+                clearInterval(interval);
+            }, 10000);
+        });
+
+        // Send Location to Newly Connected Devices
+        socket.on("send_location", (data) => {
+            socket.emit("send_location_newuser", { username: username, receiver: data.id, info: coordinates});
+        });
+
+        // User Disconnected
+        socket.on("user_disconnected", (data) => {
+            // console.log("Disconnect" + data.id);
+            document.getElementById(data.id + "").outerHTML = "";
+            delete users[data.id];
+            // console.log(users);
+            num--;
+        });
+
+        // Emergency SOS Signal
+        socket.on("sos", (data) => {
+            alert("ID: " + data.id + " Username: " + data.username + " Data: " + data.info);
+            var n = document.getElementById("warnings").innerHTML;
+            if(n == "") { n = 1; }
+            else { n++; }
+            document.getElementById("warnings").innerHTML = n;
+            var list = document.getElementById("notification-list").innerHTML;
+            list += '<a class="dropdown-item list" href="/view_location?lat=' + data.info[0] +'&lng=' + data.info[1] + '"><strong>ID: ' + data.id + '</strong><br>Emeregency Signal</a>';
+            document.getElementById("notification-list").innerHTML = list;
+        });
+    </script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=API_KEY&callback=initMap&libraries=&v=weekly" async></script>
+    
+<%- include('partials/footer.ejs') %>

@@ -1,0 +1,300 @@
+* {
+  box-sizing: border-box;
+}
+
+/* Header */
+.navbar {
+  display: inline-block;
+  width: 100%;
+  height: 10vh;
+  font-size: 1.15em;
+}
+.navbar .nav-display .navbar-brand {
+  float: left;
+  font-size: 1.4em;
+}
+#navbarSupportedContent {
+  margin-top: 10px;
+  float: right;
+}
+nav ul li a {
+  margin-left: 24px;
+}
+#user-style {
+  color: #f8f9fa;
+  font-size: 1.05em;
+  transition: 0.5s ease-out;
+  background: linear-gradient(to left, #343a40 50%, #f8f9fa 50%) right;
+  background-size: 200%;
+}
+#user-style:hover {
+  background-position: left;
+  color: #343a40;
+}
+#user-style i {
+  margin-left: 4%;
+}
+.alert {
+  margin: 0;
+  margin-top: -5px;
+  text-align: center;
+}
+.navbar .navbar-nav .button-nav {
+  border: 2px solid #f8f9fa;
+  border-radius: 1px 8px 8px 8px;
+  background-color: #f8f9fa;
+  color: #343a40;
+  font-weight: 500;
+}
+.navbar .navbar-nav .button-nav:hover {
+  color: #343a40;
+  box-shadow: 2px 2px 2px 2px #aaaaaa;
+}
+.notification {
+  position: relative;
+}
+.notification .badge {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  padding: 4px 8px;
+}
+.menu-container {
+  margin-top: 5%;
+  padding: 8% 8%;
+  width: 400px;
+}
+.menu-container .dropdown-item {
+  margin: 0;
+  padding: 10px 10px;
+}
+
+/* Footer */
+.content {
+  position: relative;
+  min-height: 100vh;
+}
+.inner-content {
+  padding-bottom: 75px;
+}
+#footer-bottom {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 10vh;
+  font-size: 1.15em;
+}
+.footer-display {
+  margin: 0;
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+.footer-display p a {
+  color: rgba(255, 255, 255, 0.5);
+  margin: 24px 24px;
+  text-decoration: none;
+}
+.footer-display p a:hover {
+  color: rgba(255, 255, 255);
+}
+
+/* Animation */
+.animate-left {
+  animation: 1s ease-out 0s 1 slideInFromLeft;
+}
+@keyframes slideInFromLeft {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+.animate-top {
+  animation: 1s ease-out 0s 1 slideInFromTop;
+}
+@keyframes slideInFromTop {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* Landing Page */
+.background {
+  margin: 0 0;
+  background: url("../images/background.jpg") no-repeat fixed center;
+  background-size: cover;
+  width: auto;
+  height: 80vh;
+  margin-top: -6px;
+}
+.landing-header {
+  padding-top: 20px;
+  text-align: center;
+  color: whitesmoke;
+}
+.landing-content {
+  color: rgb(255, 255, 255);
+  margin: 3% 4%;
+  font-size: 1.1em;
+  font-weight: 500;
+}
+.landing-btn {
+  text-align: center;
+  height: 10%;
+}
+.landing-btn button {
+  width: 10%;
+  height: 100%;
+  margin: 0 1%;
+  border-radius: 1px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+.landing-btn .btn-light {
+  color: #28a745;
+  width: 15%;
+  transition: 0.5s ease-out;
+  background: linear-gradient(to left, #f8f9fa 50%, #28a745 50%) right;
+  background-size: 200%;
+}
+.landing-btn .btn-light:hover {
+  border-color: #28a745;
+  color: #f8f9fa;
+  background-position: left;
+}
+.landing-btn .btn-primary:hover {
+  background-color: #f8f9fa;
+  border-color: #f8f9fa;
+  color: #007bff;
+}
+
+/* Locate Page */
+.location {
+  margin: 0 0;
+  background: url("../images/location.jpg") no-repeat fixed center;
+  background-size: cover;
+  width: auto;
+  height: 80vh;
+  margin-top: -6px;
+}
+.location-header {
+  padding-top: 20px;
+  text-align: center;
+  color: #343a40;
+}
+.location-content {
+  height: 80vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  background-color: rgba(255, 255, 255, 0.7);
+}
+.location-content ul {
+  width: 100%;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.list {
+  padding: 12px;
+  background: #ddd6f3; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #faaca8,
+    #ddd6f3
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #faaca8,
+    #ddd6f3
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  box-shadow: 0 1px 0 0 #f3efef inset;
+}
+.list:hover {
+  background: #ddd6f3; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #fa948e,
+    #ccc2f0
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #f89590,
+    #c8bcf1
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+.list a {
+  color: #343a40;
+  text-decoration: none;
+}
+.list a:hover {
+  color: #343a40;
+  text-decoration: none;
+  cursor: pointer;
+}
+.list .fa-location-arrow {
+  visibility: hidden;
+  font-size: 1.5em;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  color: #343a40;
+}
+.list:hover .fa-location-arrow {
+  visibility: visible;
+}
+.location-desc {
+  margin: 12px 24px;
+  font-size: 1.1em;
+  color: black;
+}
+.sound {
+  font-weight: 500;
+  color: #575e69;
+  margin-top: 1.5%;
+  font-size: 1.1em;
+}
+.sound button {
+  margin-left: 2%;
+  cursor: pointer;
+}
+
+/* Dsiplay Map */
+/* Always set the map height explicitly to define the size of the div
+* element that contains the map. */
+#collapseExample {
+  height: 100%;
+}
+
+/* Optional: Makes the sample page fill the window. */
+
+.custom-map-control-button {
+  background-color: #fff;
+  border: 0;
+  border-radius: 2px;
+  box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.3);
+  margin: 10px;
+  padding: 0 0.5em;
+  font: 400 18px Roboto, Arial, sans-serif;
+  overflow: hidden;
+  height: 40px;
+  cursor: pointer;
+}
+
+.custom-map-control-button:hover {
+  background: #ebebeb;
+}
+
+#myMap {
+  width: 100%;
+  height: 80vh;
+  margin-top: -6px;
+}

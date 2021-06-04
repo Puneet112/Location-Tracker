@@ -1,0 +1,64 @@
+<%- include('partials/header.ejs') %>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+
+<div id="myMap"></div>
+
+<script>
+    var socket = io();
+
+    let map, infoWindow;
+
+    var lat = parseFloat(JSON.parse('<%- JSON.stringify(lat) %>'));
+    var lng = parseFloat(JSON.parse('<%- JSON.stringify(lng) %>'));
+
+    function initMap() {
+        map = new google.maps.Map(document.getElementById("myMap"), {
+            center: { lat: 23.0707, lng: 80.0982 },
+            zoom: 6,
+        });
+        infoWindow = new google.maps.InfoWindow();
+        const locationButton = document.createElement("button");
+        locationButton.textContent = "Pan to Current Location";
+        locationButton.classList.add("custom-map-control-button");
+        map.controls[google.maps.ControlPosition.TOP_CENTER].push(
+            locationButton
+        );
+        locationButton.addEventListener("click", () => {
+            // Try HTML5 geolocation.
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const pos = {
+                            lat: lat,
+                            lng: lng,
+                        };
+                        infoWindow.setPosition(pos);
+                        infoWindow.setContent("Location found.");
+                        infoWindow.open(map);
+                        map.setCenter(pos);
+                    },
+                    () => {
+                        handleLocationError(true, infoWindow, map.getCenter());
+                    }
+                );
+            } else {
+                // Browser doesn't support Geolocation
+                handleLocationError(false, infoWindow, map.getCenter());
+            }
+        });
+    }
+
+    function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+        infoWindow.setPosition(pos);
+        infoWindow.setContent(
+            browserHasGeolocation
+                ? "Error: The Geolocation service failed."
+                : "Error: Your browser doesn't support geolocation."
+        );
+        infoWindow.open(map);
+    }
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=API_KEY&callback=initMap&libraries=&v=weekly" async></script>
+
+<%- include('partials/footer.ejs') %>
